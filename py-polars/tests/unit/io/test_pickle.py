@@ -5,6 +5,7 @@ import pickle
 
 import polars as pl
 from polars.testing import assert_frame_equal, assert_series_equal
+import fickling
 
 
 def test_pickle() -> None:
@@ -24,4 +25,4 @@ def test_pickle_expr() -> None:
         pickle.dump(e, f)
 
         f.seek(0)
-        pickle.load(f)
+        fickling.load(f)

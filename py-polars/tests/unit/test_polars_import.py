@@ -29,7 +29,7 @@ def _import_timings() -> bytes:
     # run in a separate process to ensure clean timing results.
     cmd = f'{sys.executable} -X importtime -c "import polars"'
     return (
-        subprocess.run(cmd, shell=True, capture_output=True)
+        subprocess.run(cmd, shell=False, capture_output=True)
         .stderr.replace(b"import time:", b"")
         .strip()
     )

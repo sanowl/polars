@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import contextlib
 import os
-import random
 import warnings
 from collections import OrderedDict, defaultdict
 from collections.abc import Sized
@@ -120,6 +119,7 @@ from polars.utils.various import (
     scale_bytes,
     warn_null_comparison,
 )
+import secrets
 
 with contextlib.suppress(ImportError):  # Module not available when building docs
     from polars.polars import PyDataFrame
@@ -9300,7 +9300,7 @@ class DataFrame:
             raise ValueError(msg)
 
         if seed is None:
-            seed = random.randint(0, 10000)
+            seed = secrets.SystemRandom().randint(0, 10000)
 
         if n is None and fraction is not None:
             if not isinstance(fraction, pl.Series):

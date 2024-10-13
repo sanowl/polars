@@ -166,8 +166,8 @@ def test_string_like(pattern: str, like: str, expected: list[int]) -> None:
     with pl.SQLContext(df=df) as ctx:
         for not_ in ("", "NOT "):
             out = ctx.execute(
-                f"""SELECT idx FROM df WHERE txt {not_}{like} '{pattern}'"""
-            ).collect()
+                f"""SELECT idx FROM df WHERE txt {not_}{like} ?""", 
+            (pattern, )).collect()
 
             res = out["idx"].to_list()
             if not_:

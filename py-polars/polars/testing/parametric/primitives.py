@@ -1,6 +1,4 @@
 from __future__ import annotations
-
-import random
 import warnings
 from dataclasses import dataclass
 from math import isfinite
@@ -32,6 +30,7 @@ from polars.testing.parametric.strategies import (
     create_list_strategy,
     scalar_strategies,
 )
+import secrets
 
 if TYPE_CHECKING:
     from typing import Literal
@@ -120,7 +119,7 @@ class column:
                 self.dtype = tp
 
         if self.dtype is None and self.strategy is None:
-            self.dtype = random.choice(strategy_dtypes)
+            self.dtype = secrets.choice(strategy_dtypes)
 
         elif self.dtype == List:
             if self.strategy is not None:
@@ -226,8 +225,7 @@ def columns(
     """
     # create/assign named columns
     if cols is None:
-        cols = random.randint(
-            a=min_cols or 0,
+        cols = secrets.SystemRandom().randint(a=min_cols or 0,
             b=max_cols or MAX_COLS,
         )
     if isinstance(cols, int):
@@ -241,7 +239,7 @@ def columns(
             raise InvalidArgument(msg)
         dtypes = list(dtype)
     elif dtype is None:
-        dtypes = [random.choice(strategy_dtypes) for _ in range(len(names))]
+        dtypes = [secrets.choice(strategy_dtypes) for _ in range(len(names))]
     elif is_polars_dtype(dtype):
         dtypes = [dtype] * len(names)
     else:
@@ -371,7 +369,7 @@ def series(
             )
             if strategy is None:
                 if series_dtype is Datetime or series_dtype is Duration:
-                    series_dtype = series_dtype(random.choice(_time_units))  # type: ignore[operator]
+                    series_dtype = series_dtype(secrets.choice(_time_units))  # type: ignore[operator]
                 dtype_strategy = all_strategies[
                     series_dtype
                     if series_dtype in all_strategies
@@ -414,7 +412,7 @@ def series(
             # apply null values (custom frequency)
             if null_probability and null_probability != 1:
                 for idx in range(series_size):
-                    if random.random() < null_probability:
+                    if secrets.SystemRandom().random() < null_probability:
                         series_values[idx] = None
 
             # init series with strategy-generated data

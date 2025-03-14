@@ -3,7 +3,6 @@ from __future__ import annotations
 import os
 from datetime import datetime, timedelta
 from itertools import chain
-from random import choice, shuffle
 from string import ascii_uppercase
 from typing import (
     TYPE_CHECKING,
@@ -60,6 +59,7 @@ from polars.datatypes import (
 )
 from polars.type_aliases import PolarsDataType
 from polars.utils.deprecation import deprecate_nonkeyword_arguments
+import secrets
 
 if TYPE_CHECKING:
     import sys
@@ -382,8 +382,8 @@ def create_list_strategy(
 
     if inner_dtype is None:
         strats = list(_get_strategy_dtypes(base_type=True))
-        shuffle(strats)
-        inner_dtype = choice(strats)
+        secrets.SystemRandom().shuffle(strats)
+        inner_dtype = secrets.choice(strats)
     if size:
         min_size = max_size = size
     else:

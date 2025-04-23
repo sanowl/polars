@@ -72,9 +72,9 @@ def test_regex_operators(
         out = ctx.execute(
             f"""
             SELECT DISTINCT category FROM foods
-            WHERE category {op} '{pattern}'
-            """
-        )
+            WHERE category {op} ?
+            """, 
+        (pattern, ))
         assert out.rows() == ([(expected,)] if expected else [])
 
 
@@ -117,9 +117,9 @@ def test_regexp_like(
         out = ctx.execute(
             f"""
             SELECT DISTINCT category FROM foods
-            WHERE {not_} REGEXP_LIKE(category,'{pattern}'{flags})
-            """
-        )
+            WHERE {not_} REGEXP_LIKE(category,?{flags})
+            """, 
+        (pattern, ))
         assert out.rows() == ([(expected,)] if expected else [])
 
 

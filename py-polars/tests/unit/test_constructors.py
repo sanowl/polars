@@ -4,7 +4,6 @@ import sys
 from collections import OrderedDict, namedtuple
 from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
-from random import shuffle
 from typing import TYPE_CHECKING, Any, List, Literal, NamedTuple
 
 import numpy as np
@@ -18,6 +17,7 @@ from polars.dependencies import _ZONEINFO_AVAILABLE, dataclasses, pydantic
 from polars.exceptions import TimeZoneAwareConstructorWarning
 from polars.testing import assert_frame_equal, assert_series_equal
 from polars.utils._construction import type_hints
+import secrets
 
 if TYPE_CHECKING:
     from polars.datatypes import PolarsDataType
@@ -991,8 +991,8 @@ def test_init_records_schema_order() -> None:
     for constructor in (pl.from_dicts, pl.DataFrame):
         # ensure field values are loaded according to the declared schema order
         for _ in range(8):
-            shuffle(data)
-            shuffle(cols)
+            secrets.SystemRandom().shuffle(data)
+            secrets.SystemRandom().shuffle(cols)
 
             df = constructor(data, schema=cols)  # type: ignore[operator]
             for col in df.columns:

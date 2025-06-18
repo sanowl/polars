@@ -1,6 +1,4 @@
 from __future__ import annotations
-
-import random
 import string
 from typing import List, cast
 
@@ -8,6 +6,7 @@ import numpy as np
 import pytest
 
 import polars as pl
+import secrets
 
 
 @pytest.fixture()
@@ -65,7 +64,7 @@ def fruits_cars() -> pl.DataFrame:
 def str_ints_df() -> pl.DataFrame:
     n = 1000
 
-    strs = pl.Series("strs", random.choices(string.ascii_lowercase, k=n))
+    strs = pl.Series("strs", secrets.SystemRandom().choices(string.ascii_lowercase, k=n))
     strs = pl.select(
         pl.when(strs == "a")
         .then(pl.lit(""))

@@ -9,6 +9,7 @@ import pytest
 
 import polars as pl
 from polars import selectors as cs
+from security import safe_command
 
 # set a maximum cutoff at 0.25 secs; note that we are typically much faster
 # than this (more like ~0.07 secs, depending on hardware), but we allow a
@@ -29,7 +30,7 @@ def _import_timings() -> bytes:
     # run in a separate process to ensure clean timing results.
     cmd = f'{sys.executable} -X importtime -c "import polars"'
     return (
-        subprocess.run(cmd, shell=True, capture_output=True)
+        safe_command.run(subprocess.run, cmd, shell=True, capture_output=True)
         .stderr.replace(b"import time:", b"")
         .strip()
     )
